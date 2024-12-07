@@ -1,8 +1,6 @@
-name: "CodeQL Analysis and Linting"
+name: "CodeQL Analysis"
 
 on:
-  push:
-    branches: ["main"]
   pull_request:
     branches: ["main"]
   schedule:
@@ -24,8 +22,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
@@ -36,11 +32,3 @@ jobs:
         uses: github/codeql-action/analyze@v2
         with:
           category: "/language:${{matrix.language}}"
-
-      - name: Format code
-        uses: creyD/prettier_action@v4.3
-        with:
-          prettier_options: --write **/*.{js,ts,json,yml,md}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          commit_message: "Automated code format"
-          push_options: 'HEAD:${{ github.head_ref }}'
