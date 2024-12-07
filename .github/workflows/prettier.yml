@@ -12,15 +12,17 @@ jobs:
       contents: read
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v3
         with:
+          # Make sure the actual branch is checked out when running on pull requests
+          ref: ${{ github.head_ref }}
+          # This is important to fetch the changes to the previous commit
           fetch-depth: 0
 
-      - name: Format code
+      - name: Format
         uses: creyD/prettier_action@v4.3
         with:
-          prettier_options: --write **/*.{js,ts,json,yml,md}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          commit_message: "Automated code format"
- 
+          # This part is also where you can pass other options, for example:
+          prettier_options: --write **/*.{js,md}
+          only_changed: True
