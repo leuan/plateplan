@@ -2,15 +2,15 @@ version: 2
 updates:
   # NPM dependencies
   - package-ecosystem: "npm"
-    directory: "/"
+    directory: "/workers/backend"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
     versioning-strategy: auto
    
-  # Docker dependencies
-  - package-ecosystem: "docker"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 10
+  # # Docker dependencies
+  # - package-ecosystem: "docker"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
+  #   open-pull-requests-limit: 10
