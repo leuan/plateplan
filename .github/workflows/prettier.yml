@@ -1,0 +1,26 @@
+name: "Prettier formatting"
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  format:
+    name: Format code
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Format code
+        uses: creyD/prettier_action@v4.3
+        with:
+          prettier_options: --write **/*.{js,ts,json,yml,md}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          commit_message: "Automated code format"
+ 
