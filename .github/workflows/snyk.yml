@@ -1,0 +1,41 @@
+name: Snyk Security Scan
+on:
+  pull_request:
+    branches: ["main"]
+  schedule:
+    - cron: "30 1 * * 0"
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Snyk CLI
+        uses: snyk/actions/setup@806182742461562b67788a64410098c9d9b96adb
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: cd workers/backend && bun i && cd ../..
+
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+
+      - name: Snyk Code test
+        run: snyk code test --sarif > snyk-code.sarif || true && cat snyk-code.sarif
+
+      - name: Snyk IaC test and report
+        run: snyk iac test --report || true
+
+      - name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: snyk-code.sarif
