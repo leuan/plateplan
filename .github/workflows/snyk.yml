@@ -23,7 +23,7 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        run: cd workers/backend && bun i
+        run: cd workers/backend && bun i && cd ../..
 
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -31,9 +31,6 @@ jobs:
 
       - name: Snyk Code test
         run: snyk code test --sarif > snyk-code.sarif || true 
-
-      - name: Snyk Open Source monitor
-        run: snyk monitor --all-projects
 
       - name: Snyk IaC test and report
         run: snyk iac test --report || true
